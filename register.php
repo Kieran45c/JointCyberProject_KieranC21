@@ -3,14 +3,14 @@ require_once "config.php";
 
 $sql = 'CREATE TABLE IF NOT EXISTS accounts (
 id int NOT NULL AUTO_INCREMENT,
-iv varchar(32) NOT NULL,
-username varchar(30) NOT NULL ,
-password varchar(30) NOT NULL ,
 firstName  varchar(30) NOT NULL,
 lastName  varchar(30) NOT NULL,
-address  varchar(30) NOT NULL,
+dateOfBirth varchar(10) NOT NULL,
 email varchar(30) NOT NULL,
+password varchar(30) NOT NULL ,
+address  varchar(30) NOT NULL,
 phoneNumber  varchar(10) NOT NULL,
+iv varchar(32) NOT NULL,
 PRIMARY KEY (id));'; 
 
 if (!$conn->query($sql) === TRUE) {
@@ -35,6 +35,12 @@ div{
 	text-align: 
 	center;
 }
+
+input {
+ width: 375px;
+ height: 25px;
+}
+
  </style>
 <body>
 
@@ -45,27 +51,31 @@ if (isset($_POST['Register'])) {
   $hash = password_hash('password', PASSWORD_DEFAULT);
   
   $iv = random_bytes(16);
-  $escaped_content1 = $conn -> real_escape_string($_POST['username']);
-  $escaped_content2 = $conn -> real_escape_string($_POST['firstName']);
-  $escaped_content3 = $conn -> real_escape_string($_POST['lastName']);
-  $escaped_content4 = $conn -> real_escape_string($_POST['address']);
-  $escaped_content5 = $conn -> real_escape_string($_POST['email']);
-  $escaped_content6 = $conn -> real_escape_string($_POST['phoneNumber']);
-  $encrypted_content1 = openssl_encrypt($escaped_content1, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-  $encrypted_content2 = openssl_encrypt($escaped_content2, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-  $encrypted_content3 = openssl_encrypt($escaped_content3, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-  $encrypted_content4 = openssl_encrypt($escaped_content4, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-  $encrypted_content5 = openssl_encrypt($escaped_content5, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-  $encrypted_content6 = openssl_encrypt($escaped_content6, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+  $escaped_firstName = $conn -> real_escape_string($_POST['firstName']);
+  $escaped_lastName = $conn -> real_escape_string($_POST['lastName']);
+  $escaped_dateOfBirth = $conn -> real_escape_string($_POST['dateOfBirth']);
+  $escaped_email = $conn -> real_escape_string($_POST['email']);
+  $escaped_address = $conn -> real_escape_string($_POST['address']);
+  $escaped_phoneNumber = $conn -> real_escape_string($_POST['phoneNumber']);
+  
+  $encrypted_firstName = openssl_encrypt($escaped_firstName, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+  $encrypted_lastName = openssl_encrypt($escaped_lastName, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+  $encrypted_dateOfBirth = openssl_encrypt($escaped_dateOfBirth, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+  $encrypted_email = openssl_encrypt($escaped_email, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+  $encrypted_address = openssl_encrypt($escaped_address, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+  $encrypted_phoneNumber = openssl_encrypt($escaped_phoneNumber, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+  
+  $firstName_hex = bin2hex($encrypted_firstName);
+  $lastName_hex = bin2hex($encrypted_lastName);
+  $dateOfBirth_hex = bin2hex($encrypted_dateOfBirth);
+  $email_hex = bin2hex($encrypted_email);
+  $address_hex = bin2hex($encrypted_address);
+  $phoneNumber_hex = bin2hex($encrypted_phoneNumber);
   $iv_hex = bin2hex($iv);
-  $username_hex = bin2hex($encrypted_content1);
-  $firstName_hex = bin2hex($encrypted_content2);
-  $lastName_hex = bin2hex($encrypted_content3);
-  $address_hex = bin2hex($encrypted_content4);
-  $email_hex = bin2hex($encrypted_content5);
-  $phoneNumber_hex = bin2hex($encrypted_content6);
-  $sql = "INSERT INTO accounts (iv, username, password, firstName, lastName, address, email, phoneNumber)
-  VALUES ('$iv_hex', '$username_hex', '$hash', '$firstName_hex', '$lastName_hex', '$address_hex', '$email_hex', '$phoneNumber_hex')";
+  
+  $sql = "INSERT INTO accounts (firstName, lastName, dateOfBirth, email, password, address, phoneNumber, iv)
+  VALUES ('$firstName_hex', '$lastName_hex', '$dateOfBirth_hex', '$email_hex', '$hash', '$address_hex', '$phoneNumber_hex', '$iv_hex')";
+  
   if ($conn->query($sql) === TRUE) {
     echo '<p><i>Account Created!</i></p>';
   } else {
@@ -75,22 +85,16 @@ if (isset($_POST['Register'])) {
 ?>
 
 <form action="register.php" method="POST">
-   Username: <input type="text" id="username"
-   name="username" required="required" /> <br> <br/>
-   Password: <input type="password" id="password"
-   name="password" required="required" /> <br> <br/>
-   First Name: <input type="text" id="firstName"
-   name="firstName" required="required" /> <br> <br/>
-   Last Name: <input type="text" id="firstName"
-   name="lastName" required="required" /> <br> <br/>
-   Address: <input type="text" id="lastName"
-   name="address" required="required" /> <br> <br/>
-   Email Address: <input type="email" id="email"
-   name="email" required="required" /> <br> <br/>
-   Phone Number: <input type="tel" id="phoneNumber"
-   name="phoneNumber" required="required" /> <br> <br/>
+   <input type="text" id="firstName" name="firstName" required="required" placeholder= "First Name" /> <br> <br/>
+   <input type="text" id="lastName" name="lastName" required="required" placeholder= "Last Name" /> <br> <br/>
+   <input type="text" id="dateOfBirth" name="dateOfBirth" required="required" placeholder= "Date Of Birth" onfocus="(this.type='date')" /> <br> <br/>
+   <input type="email" id="email" name="email" required="required" placeholder= "Email Address" /> <br> <br/>
+   <input type="password" id="password" name="password" required="required" placeholder= "Password" /> <br> <br/>
+   <input type="text" id="lastName" name="address" required="required"  placeholder= "Address" /> <br> <br/>
+   <input type="tel" id="phoneNumber" name="phoneNumber" required="required" placeholder= "Phone Number" /> <br> <br/>
    <input type="submit" value="Register" name= "Register"/>
 </form>
+
 
 
 <p><a href="index.php">Click here to go back</a> </p>
