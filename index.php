@@ -15,17 +15,21 @@ div {
 	text-align: 
 	center;
 }
+
+input {
+ width: 375px;
+ height: 25px;
+}
+
  </style>
 <h2>Login Page</h2>
 <body>
 <form action="index.php" method="POST">
-   Enter your username: <input type="text" 
-   name="username" required="required" /> <br/> <br>
-   Enter password: <input type="password" 
-   name="password" required="required" /> <br/> <br>
+   <input type="text" name="username" required="required" placeholder= "Email Address" /> <br/> <br>
+   <input type="password" name="password" required="required" placeholder= "Password" /> <br/> <br>
    <input type="submit" value="Login"/> 
-   
 </form>
+ 
 </p><a href="register.php"> Click here to register </p>
 </div>
 </body>
