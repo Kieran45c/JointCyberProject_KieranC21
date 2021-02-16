@@ -40,31 +40,32 @@ div{
 
 <?php
 if (isset($_POST['Register'])) {
+
+  $escaped_paswword = $conn -> real_escape_string($_POST['password']);
+  $hash = password_hash('password', PASSWORD_DEFAULT);
+  
   $iv = random_bytes(16);
   $escaped_content1 = $conn -> real_escape_string($_POST['username']);
-  $escaped_content2 = $conn -> real_escape_string($_POST['password']);
-  $escaped_content3 = $conn -> real_escape_string($_POST['firstName']);
-  $escaped_content4 = $conn -> real_escape_string($_POST['lastName']);
-  $escaped_content5 = $conn -> real_escape_string($_POST['address']);
-  $escaped_content6 = $conn -> real_escape_string($_POST['email']);
-  $escaped_content7 = $conn -> real_escape_string($_POST['phoneNumber']);
+  $escaped_content2 = $conn -> real_escape_string($_POST['firstName']);
+  $escaped_content3 = $conn -> real_escape_string($_POST['lastName']);
+  $escaped_content4 = $conn -> real_escape_string($_POST['address']);
+  $escaped_content5 = $conn -> real_escape_string($_POST['email']);
+  $escaped_content6 = $conn -> real_escape_string($_POST['phoneNumber']);
   $encrypted_content1 = openssl_encrypt($escaped_content1, $cipher, $key, OPENSSL_RAW_DATA, $iv);
   $encrypted_content2 = openssl_encrypt($escaped_content2, $cipher, $key, OPENSSL_RAW_DATA, $iv);
   $encrypted_content3 = openssl_encrypt($escaped_content3, $cipher, $key, OPENSSL_RAW_DATA, $iv);
   $encrypted_content4 = openssl_encrypt($escaped_content4, $cipher, $key, OPENSSL_RAW_DATA, $iv);
   $encrypted_content5 = openssl_encrypt($escaped_content5, $cipher, $key, OPENSSL_RAW_DATA, $iv);
   $encrypted_content6 = openssl_encrypt($escaped_content6, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-  $encrypted_content7 = openssl_encrypt($escaped_content7, $cipher, $key, OPENSSL_RAW_DATA, $iv);
   $iv_hex = bin2hex($iv);
   $username_hex = bin2hex($encrypted_content1);
-  $password_hex = bin2hex($encrypted_content2);
-  $firstName_hex = bin2hex($encrypted_content3);
-  $lastName_hex = bin2hex($encrypted_content4);
-  $address_hex = bin2hex($encrypted_content5);
-  $email_hex = bin2hex($encrypted_content6);
-  $phoneNumber_hex = bin2hex($encrypted_content7);
+  $firstName_hex = bin2hex($encrypted_content2);
+  $lastName_hex = bin2hex($encrypted_content3);
+  $address_hex = bin2hex($encrypted_content4);
+  $email_hex = bin2hex($encrypted_content5);
+  $phoneNumber_hex = bin2hex($encrypted_content6);
   $sql = "INSERT INTO accounts (iv, username, password, firstName, lastName, address, email, phoneNumber)
-  VALUES ('$iv_hex', '$username_hex', '$password_hex', '$firstName_hex', '$lastName_hex', '$address_hex', '$email_hex', '$phoneNumber_hex')";
+  VALUES ('$iv_hex', '$username_hex', '$hash', '$firstName_hex', '$lastName_hex', '$address_hex', '$email_hex', '$phoneNumber_hex')";
   if ($conn->query($sql) === TRUE) {
     echo '<p><i>Account Created!</i></p>';
   } else {
@@ -84,9 +85,9 @@ if (isset($_POST['Register'])) {
    name="lastName" required="required" /> <br> <br/>
    Address: <input type="text" id="lastName"
    name="address" required="required" /> <br> <br/>
-   Email Address: <input type="text" id="email"
+   Email Address: <input type="email" id="email"
    name="email" required="required" /> <br> <br/>
-   Phone Number: <input type="text" id="phoneNumber"
+   Phone Number: <input type="tel" id="phoneNumber"
    name="phoneNumber" required="required" /> <br> <br/>
    <input type="submit" value="Register" name= "Register"/>
 </form>
