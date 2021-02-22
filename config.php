@@ -18,4 +18,20 @@ if (!$conn->query($sql) === TRUE) {
   die('Error using database: ' . $conn->error);
 }
 
+$sql = 'CREATE TABLE IF NOT EXISTS accounts (
+id int NOT NULL AUTO_INCREMENT,
+firstName  varchar(256) NOT NULL,
+lastName  varchar(256) NOT NULL,
+dateOfBirth varchar(10) NOT NULL,
+email varchar(256) NOT NULL,
+password varchar(255) NOT NULL,
+address  varchar(256) NOT NULL,
+phoneNumber  varchar(10) NOT NULL,
+iv varchar(32) NOT NULL,
+PRIMARY KEY (id));'; 
+
+if (!$conn->query($sql) === TRUE) {
+  die('Error creating table: ' . $conn->error);
+}
+
 ?>

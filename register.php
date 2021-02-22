@@ -1,22 +1,6 @@
 <?php
 require_once "config.php";
 
-$sql = 'CREATE TABLE IF NOT EXISTS accounts (
-id int NOT NULL AUTO_INCREMENT,
-firstName  varchar(30) NOT NULL,
-lastName  varchar(30) NOT NULL,
-dateOfBirth varchar(10) NOT NULL,
-email varchar(30) NOT NULL,
-password varchar(30) NOT NULL ,
-address  varchar(30) NOT NULL,
-phoneNumber  varchar(10) NOT NULL,
-iv varchar(32) NOT NULL,
-PRIMARY KEY (id));'; 
-
-if (!$conn->query($sql) === TRUE) {
-  die('Error creating table: ' . $conn->error);
-}
-
 $cipher = 'AES-128-CBC';
 $key = 'thebestsecretkey';
 ?>
@@ -47,8 +31,8 @@ input {
 <?php
 if (isset($_POST['Register'])) {
 
-  $escaped_paswword = $conn -> real_escape_string($_POST['password']);
-  $hash = password_hash('password', PASSWORD_DEFAULT);
+  $escaped_password = $conn -> real_escape_string($_POST['password']);
+  $hash = password_hash($escaped_password, PASSWORD_DEFAULT);
   
   $iv = random_bytes(16);
   $escaped_firstName = $conn -> real_escape_string($_POST['firstName']);
