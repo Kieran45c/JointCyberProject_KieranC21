@@ -1,6 +1,8 @@
 <?php
 require_once "config.php";
 
+session_start();
+
 $cipher = 'AES-128-CBC';
 $key = 'thebestsecretkey';
 
@@ -9,7 +11,8 @@ $key = 'thebestsecretkey';
 <html>
 <div>
 <style>
-div { 
+div { 	
+	background-color: grey;
 	max-width:420px;
 	margin:50px auto; 
 	border-style: solid;
@@ -22,15 +25,37 @@ div {
 input {
  width: 375px;
  height: 25px;
+
+}
+
+h2 {
+	color: white;	
+}
+
+a:link, a:visited {
+  background-color: black;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 8px;
+}
+
+a:hover {
+  background-color: red;
 }
 
  </style>
  
-<h2>Login Page</h2>
+<h2>Login</h2>
 <body>
 
 <?php
 
+if(isset($_SESSION["email"]))
+{
+	header("location:bookings.php");
+}
 if (isset($_POST['Login'])) {
 
 $sql = "SELECT email, password, iv FROM accounts";
@@ -45,30 +70,28 @@ if ($result->num_rows > 0) {
 	$passwordHashed = $row['password'];
 	$iv = hex2bin($row['iv']);
     $unencrypted_email = openssl_decrypt($email, $cipher, $key, OPENSSL_RAW_DATA, $iv);
-
-  }
-  
-  	
-    if(password_verify($escaped_password, $passwordHashed)){
-		
-		echo "Password correct";
-	}
-	else
-	{
-		echo "Password incorrect";
-	}
-
+ 
 	
-	
-	if($escaped_email === $unencrypted_email)
+    if($escaped_email === $unencrypted_email)
     {
-		echo "Correct Email";
+		if(password_verify($escaped_password, $passwordHashed))
+		{
+			$_SESSION["email"] =  $unencrypted_email;
+			header("location:bookings.php");	
+		}
+		else
+		{
+			echo '<p>Wrong Password!</p>';
+			break;
+		}
 	}
 	else
 	{
-	    echo "Wrong Email";
+		echo '<p>Wrong Email!</p>';
+		break;
 	}
-	
+		
+  }	 	
 	
 } else {
   echo '<p>There are no Accounts!</p>';
@@ -84,9 +107,7 @@ if ($result->num_rows > 0) {
 </form>
 
 
-</p><a href="register.php"> Click here to register </p>
-
-</p><a href="bookings.php"> Click here to go to booking</p>
+<p><a href="register.php">Click Here To Sign Up</p>
 </div>
 </body>
 </html>

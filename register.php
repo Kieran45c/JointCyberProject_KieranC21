@@ -1,15 +1,18 @@
 <?php
 require_once "config.php";
 
+session_start();
+
 $cipher = 'AES-128-CBC';
 $key = 'thebestsecretkey';
 ?>
 
 <html>
 <div>
-<h2>Registration Page</h2>
+<h2>Sign Up</h2>
 <style>
-div{ 
+div{ 	
+	background-color: grey;
 	max-width:420px;
 	margin:50px auto;
 	border-style:
@@ -20,11 +23,27 @@ div{
 	center;
 }
 
+h2 {
+	color: white;	
+}
+
 input {
  width: 375px;
  height: 25px;
 }
 
+a:link, a:visited {
+  background-color: black;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 8px;
+}
+
+a:hover {
+  background-color: red;
+}
  </style>
 <body>
 
@@ -81,7 +100,7 @@ if (isset($_POST['Register'])) {
 
 
 
-<p><a href="index.php">Click here to go back</a> </p>
+<p><a href="index.php">Click Here To Login</a> </p>
 </div>
 
 </div>
