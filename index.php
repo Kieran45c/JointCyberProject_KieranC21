@@ -3,9 +3,6 @@ require_once "config.php";
 
 session_start();
 
-$cipher = 'AES-128-CBC';
-$key = 'thebestsecretkey';
-
 ?>
 
 <html>
@@ -70,8 +67,7 @@ if ($result->num_rows > 0) {
 	$passwordHashed = $row['password'];
 	$iv = hex2bin($row['iv']);
     $unencrypted_email = openssl_decrypt($email, $cipher, $key, OPENSSL_RAW_DATA, $iv);
- 
-	
+ 	
     if($escaped_email === $unencrypted_email)
     {
 		if(password_verify($escaped_password, $passwordHashed))
@@ -82,13 +78,11 @@ if ($result->num_rows > 0) {
 		else
 		{
 			echo '<p>Wrong Password!</p>';
-			break;
 		}
 	}
 	else
 	{
 		echo '<p>Wrong Email!</p>';
-		break;
 	}
 		
   }	 	

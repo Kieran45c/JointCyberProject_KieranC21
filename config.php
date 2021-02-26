@@ -19,7 +19,7 @@ if (!$conn->query($sql) === TRUE) {
 }
 
 $sql = 'CREATE TABLE IF NOT EXISTS accounts (
-id int NOT NULL AUTO_INCREMENT,
+accountID int NOT NULL AUTO_INCREMENT,
 firstName  varchar(256) NOT NULL,
 lastName  varchar(256) NOT NULL,
 dateOfBirth varchar(256) NOT NULL,
@@ -28,10 +28,12 @@ password varchar(256) NOT NULL,
 address  varchar(256) NOT NULL,
 phoneNumber  varchar(256) NOT NULL,
 iv varchar(32) NOT NULL,
-PRIMARY KEY (id));'; 
+PRIMARY KEY (accountID));'; 
 
 if (!$conn->query($sql) === TRUE) {
   die('Error creating table: ' . $conn->error);
 }
 
+$cipher = 'AES-128-CBC';
+$key = 'thebestsecretkey';
 ?>
