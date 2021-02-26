@@ -3,8 +3,6 @@ require_once "config.php";
 
 session_start();
 
-$cipher = 'AES-128-CBC';
-$key = 'thebestsecretkey';
 ?>
 
 <html>
