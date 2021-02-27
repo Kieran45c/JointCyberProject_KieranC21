@@ -1,3 +1,13 @@
+<?php
+session_start();
+
+if(!isset($_SESSION["email"]))
+{
+	header("location:index.php?action=login");
+}
+
+?>
+
 <html>
 <style>
 .navBar {
@@ -9,26 +19,33 @@
 }
 
 .navBar a {
+ 
+  background-color: Grey;
   float: left;
-  color: white;
+  color: black;
   padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
 
 }
 
-.navBar a.active {
-  background-color: black;
-  color: white;
+a:hover {
+  background-color: green;
 }
 </style>
 <body>
 
 <div class="navBar">
-  <a class="active" href="bookings.php">Book A Test</a> 
-  <a href="viewBookings.php">Book A Vaccination</a>
-  <a href="viewTestResults.php">View Test Results</a>
-  <a href="logout.php">Logout</a>
+
+<?php
+
+echo '<h3> Welcome: '.$_SESSION["email"].'</h3>';
+
+?>
+  <a  href="bookings.php">Book A Test</a> 
+  <a  href="vacBookings.php">Book A Vaccination</a>
+  <a  href="viewTestResults.php">View Test Results</a>
+  <a  href="logout.php">Logout</a>
 </div>
 
 

@@ -2,19 +2,18 @@
 require_once "config.php";
 require_once "navBar.php";
 
-
-$sql = 'CREATE TABLE IF NOT EXISTS testBookings (
-bookingID int NOT NULL AUTO_INCREMENT,
+$sql = 'CREATE TABLE IF NOT EXISTS vacBookings (
+vaccinationID int NOT NULL AUTO_INCREMENT,
 testDateTime varchar(256) NOT NULL,
 iv varchar(32) NOT NULL,
 accountID INT NOT NULL REFERENCES accounts(accountID),
-PRIMARY KEY (bookingID));'; 
+PRIMARY KEY (vaccinationID));'; 
 
 if (!$conn->query($sql) === TRUE) {
   die('Error creating table: ' . $conn->error);
 }
 
-$sql = "SELECT * FROM accounts JOIN testBookings ON accounts.accountID = testBookings.accountID";
+$sql = "SELECT * FROM accounts JOIN vacBookings ON accounts.accountID = vacBookings.accountID";
 
 ?>
 
@@ -23,7 +22,7 @@ $sql = "SELECT * FROM accounts JOIN testBookings ON accounts.accountID = testBoo
 <style>
 div { 
 	
-	background-image: url("https://picsum.photos/id/200/800/800");
+	background-image: url("https://picsum.photos/id/100/800/800");
 	max-width:420px;
 	margin:50px auto; 
 	color:black;
@@ -41,7 +40,6 @@ input {
 <body>
 
 <?php
-
 
 if (isset($_POST['Book'])) {	
 $sql = "SELECT accountID, email, iv FROM accounts";
@@ -63,13 +61,13 @@ if ($result->num_rows > 0) {
 		$iv_hex = bin2hex($iv);
 
 
-		$sql = "INSERT INTO testBookings (testDateTime, iv, accountID) VALUES ('$testDateTime_hex', '$iv_hex', '$accountID')";
+		$sql = "INSERT INTO vacBookings (testDateTime, iv, accountID) VALUES ('$testDateTime_hex', '$iv_hex', '$accountID')";
 
 		  if ($conn->query($sql) === TRUE) {
-			echo '<p><i>Test Booked For: </i></p>'; echo "$escaped_testDateTime";
+			echo '<p><i>Vaccination Booked For: </i></p>'; echo "$escaped_testDateTime";
 			echo "<br>";
 			echo "<br>";
-			echo '<p><b><i>To stop the spread of COVID19 please self isolate as you wait for your test</i></b></p>';  
+			echo '<p><b><i>To stop the spread of COVID19 please self isolate as you wait for your vaccination</i></b></p>';  
 		  } else {
 			die('Error booking test: ' . $conn->error);
 		  }
@@ -85,8 +83,8 @@ if ($result->num_rows > 0) {
 }
 ?>
 
-<h2>Book a test</h2>
-<form action="bookings.php" method="POST">
+<h2>Book a vaccination</h2>
+<form action="vacBookings.php" method="POST">
    <input type="text" id="testDateTime" name="testDateTime" required="required" placeholder= "Book A Test Date & Time" onfocus="(this.type='datetime-local')" /> <br> <br/>
    <input type="submit" value="Book" name= "Book"/> 
 </form>
