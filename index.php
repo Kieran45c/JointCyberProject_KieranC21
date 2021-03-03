@@ -61,6 +61,8 @@ $result = $conn->query($sql);
 $escaped_email = $conn -> real_escape_string($_POST['email']);
 $escaped_password = $conn -> real_escape_string($_POST['password']);
 
+$count = 0;
+
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
     $email = hex2bin($row['email']);
@@ -78,9 +80,15 @@ if ($result->num_rows > 0) {
 		else
 		{
 			echo '<p>Wrong Password!</p>';
+			break;
 		}
 	}
 	else
+	{
+		$count++;
+	}
+	
+	if($escaped_email != $unencrypted_email && $count < 2)
 	{
 		echo '<p>Wrong Email!</p>';
 	}

@@ -85,7 +85,7 @@ if ($result->num_rows > 0) {
 
 <h2>Book a vaccination</h2>
 <form action="vacBookings.php" method="POST">
-   <input type="text" id="testDateTime" name="testDateTime" required="required" placeholder= "Book A Test Date & Time" onfocus="(this.type='datetime-local')" /> <br> <br/>
+   <input type="text" id="testDateTime" name="testDateTime" required="required" placeholder= "Book A Vaccination Date & Time" onfocus="(this.type='datetime-local')" /> <br> <br/>
    <input type="submit" value="Book" name= "Book"/> 
 </form>
 <br>
