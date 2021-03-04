@@ -7,14 +7,28 @@ $sql = 'CREATE TABLE IF NOT EXISTS testBookings (
 bookingID int NOT NULL AUTO_INCREMENT,
 testDateTime varchar(256) NOT NULL,
 iv varchar(32) NOT NULL,
-accountID INT NOT NULL REFERENCES accounts(accountID),
+accountID int NOT NULL,
 PRIMARY KEY (bookingID));'; 
+
+
+if (!$conn->query($sql) === TRUE) {
+  die('Error creating table: ' . $conn->error);
+}
+
+
+$sql = 'CREATE TABLE IF NOT EXISTS vacBookings (
+vaccinationID int NOT NULL AUTO_INCREMENT,
+testDateTime varchar(256) NOT NULL,
+iv varchar(32) NOT NULL,
+accountID int NOT NULL,
+PRIMARY KEY (vaccinationID));'; 
 
 if (!$conn->query($sql) === TRUE) {
   die('Error creating table: ' . $conn->error);
 }
 
 $sql = "SELECT * FROM accounts JOIN testBookings ON accounts.accountID = testBookings.accountID";
+
 
 ?>
 
@@ -89,6 +103,50 @@ if ($result->num_rows > 0) {
 <form action="bookings.php" method="POST">
    <input type="text" id="testDateTime" name="testDateTime" required="required" placeholder= "Book A Test Date & Time" onfocus="(this.type='datetime-local')" /> <br> <br/>
    <input type="submit" value="Book" name= "Book"/> 
+</form>
+<br>
+
+
+<?php
+
+
+if (isset($_POST['Delete'])) {	
+$sql = "SELECT accountID, email, iv FROM accounts";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+  while($row = $result->fetch_assoc()) {
+    $iv = hex2bin($row['iv']);
+    $email = hex2bin($row['email']);
+	$accountID = $row['accountID'];
+    $unencrypted_email = openssl_decrypt($email, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+	
+	
+	if($_SESSION["email"] ===  $unencrypted_email)
+	{
+		$sql = "DELETE FROM accounts WHERE accountID = '$accountID'";
+		
+		if ($conn->query($sql) === TRUE) {
+		 header("location:logout.php");	
+		}
+		else if (!$conn->query($sql) === TRUE) {
+		  die('Error Deleting Account!' . $conn->error);
+		}
+	}
+	
+	
+  }
+
+} else {
+  echo '<p>An issue as occured!</p>';
+}
+
+}
+?>
+
+<h2>Delete Your Account</h2>
+<form action="bookings.php" method="POST">
+   <input type="submit" value="Delete" name= "Delete"/> 
 </form>
 <br>
 

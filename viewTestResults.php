@@ -27,7 +27,8 @@ input {
 <body>
 
 
-<h2>You can view your test results here when they become available or by text</h2>
+<h2>When your test results become available you can view them here</h2>
+<h3>You will also be sent a text<h3>
 
 <form action="viewTestResults.php">
     <input type="text" id="Not Available" name="Not Available" value="Not Available" readonly><br><br>

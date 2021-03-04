@@ -2,16 +2,6 @@
 require_once "config.php";
 require_once "navBar.php";
 
-$sql = 'CREATE TABLE IF NOT EXISTS vacBookings (
-vaccinationID int NOT NULL AUTO_INCREMENT,
-testDateTime varchar(256) NOT NULL,
-iv varchar(32) NOT NULL,
-accountID INT NOT NULL REFERENCES accounts(accountID),
-PRIMARY KEY (vaccinationID));'; 
-
-if (!$conn->query($sql) === TRUE) {
-  die('Error creating table: ' . $conn->error);
-}
 
 $sql = "SELECT * FROM accounts JOIN vacBookings ON accounts.accountID = vacBookings.accountID";
 

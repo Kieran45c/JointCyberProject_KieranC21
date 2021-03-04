@@ -93,6 +93,9 @@ if (isset($_POST['Register'])) {
    <input type="password" id="password" name="password" required="required" placeholder= "Password" /> <br> <br/>
    <input type="text" id="lastName" name="address" required="required"  placeholder= "Address" /> <br> <br/>
    <input type="tel" id="phoneNumber" name="phoneNumber" required="required" placeholder= "Phone Number" /> <br> <br/>
+   By ticking here you agree to our <u><b>Terms And Conditions</b></u><input class="terms" type="checkbox" name="terms" id="terms" value="terms" required="required"> <br> <br/>
+
+                
    <input type="submit" value="Register" name= "Register"/>
 </form>
 
